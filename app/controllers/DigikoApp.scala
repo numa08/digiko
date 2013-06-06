@@ -11,19 +11,18 @@ object DigikoApp extends Controller {
   
   def index = Action {
   	val application = new DefaultApplication(new File("conf/"), this.getClass.getClassLoader, None, Mode.Dev)
-  	val conf = application.resourceAsStream("account.json")
-    // Ok(views.html.index("Your new application is ready."))
-    val config = conf match {
-    	case Some(stream) => Source.fromInputStream(stream).mkString
-    	case _ => "No"
-    }
-    val json = Json.parse(config
-      )
-    val name = json.\("name").asOpt[String]
-    val password = json.\("password").asOpt[String]
-
-    val account = for(acName <- name; acPassword <- password) yield{
-      Account(acName, acPassword)
+  	val account_config = application.resourceAsStream("account.json")
+    val account = account_config match {
+    	case Some(stream) => {
+                val jsonString = Source.fromInputStream(stream).mkString
+                val json = Json.parse(jsonString)
+                val nameOpt = json.\("name").asOpt[String]
+                val passOpt = json.\("password").asOpt[String]
+                for(name <- nameOpt ; pass <- passOpt) yield {
+                  Account(name, pass)
+                }
+              }
+    	case _ => None
     }
     val res = account match {
       case Some(account) => account.name + ", " + account.password
