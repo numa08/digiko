@@ -10,39 +10,39 @@ import play.api.libs.functional.syntax._
 
 object DigikoApp extends Controller {
 
-  implicit val vboxReads = (__ \ "port").read[String].map(v => VBox(v))
-  
+  implicit val accoutReader = (
+      (__ \ "name").read[String] and
+      (__ \ "password").read[String]
+    )(Account.apply _)
+
+  implicit val vboxReader = (
+      (__ \ "port").read[String] and
+      (__ \ "host").read[String]
+    )(VBox.apply _)
+
   def index = Action {
   	val application = new DefaultApplication(new File("conf/"), this.getClass.getClassLoader, None, Mode.Dev)
-  	val account_config = application.resourceAsStream("account.json")
-    val account = account_config match {
+  	val accountConfig = application.resourceAsStream("account.json")
+    val accountJson = accountConfig match {
     	case Some(stream) => {
                 val jsonString = Source.fromInputStream(stream).mkString
-                val json = Json.parse(jsonString)
-                val nameOpt = json.\("name").asOpt[String]
-                val passOpt = json.\("password").asOpt[String]
-                for(name <- nameOpt ; pass <- passOpt) yield {
-                  Account(name, pass)
-                }
+                Json.parse(jsonString)
               }
-    	case _ => None
+    	case _ => JsNull
     }
-
-    val vbox_config = application.resourceAsStream("vbox.json")
-    val vbox = vbox_config match {
-      case Some(stream) => {
-                  val jsonString = Source.fromInputStream(stream).mkString
-                  val json = Json.parse(jsonString)
-                  val optPort = json.asOpt[VBox]
-                }
-      case _ => None
-    }
+    val account = accountJson.validate[Account].asOpt
     
-    val res = account match {
-      case Some(account) => account.name + ", " + account.password
-      case _ => ""
+    val vboxConfig = application.resourceAsStream("vbox.json")
+    val vboxJson = vboxConfig match {
+      case Some(stream) => {
+                val jsonString = Source.fromInputStream(stream).mkString
+                Json.parse(jsonString)
+            }
+      case _ => JsNull
     }
-    Ok(res)
+    val vbox = vboxJson.validate[VBox].asOpt
+    
+    Ok(account + "" + vbox)
   }
   
 }
