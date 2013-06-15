@@ -6,19 +6,8 @@ import java.io.File
 import scala.io.Source
 import models._
 import play.api.libs.json._
-import play.api.libs.functional.syntax._
 
 object DigikoApp extends Controller {
-
-  implicit val accoutReader = (
-      (__ \ "name").read[String] and
-      (__ \ "password").read[String]
-    )(Account.apply _)
-
-  implicit val vboxReader = (
-      (__ \ "port").read[String] and
-      (__ \ "host").read[String]
-    )(VBox.apply _)
 
   def index = Action {
   	val application = new DefaultApplication(new File("conf/"), this.getClass.getClassLoader, None, Mode.Dev)
@@ -40,7 +29,7 @@ object DigikoApp extends Controller {
             }
       case _ => JsNull
     }
-    val vboxConfig = vboxJson.validate[VBox].asOpt
+    val vboxConfig = vboxJson.validate[VBoxConfig].asOpt
 
     
     val res = VirtualBox(account, vboxConfig).allVms.map( _.getName)
