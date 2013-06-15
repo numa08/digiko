@@ -33,6 +33,7 @@ object DigikoApp extends Controller {
 
     
     val res = VirtualBox(account, vboxConfig).allVms.map( _.getName)
+    //名前、状態のJSONリストを作る
     Ok(res.toString)
   }
   
