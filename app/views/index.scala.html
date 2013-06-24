@@ -1,7 +1,28 @@
-@(message: String)
-
-@main("Welcome to Play 2.1") {
-    
-    @play20.welcome(message)
-    
-}
+@(vms:List[String])
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>numa08 virtual boxes</title>
+</head>
+<body>
+	<table>
+		<thead>
+			<tr>
+				<td>
+					名前
+				</td>
+			</tr>
+		</thead>
+		<tbody>
+			@for(m <- vms){
+				<tr>
+					<td>
+						@m
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</body>
+</html>
