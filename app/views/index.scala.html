@@ -9,27 +9,22 @@
 <body>
 	<div class="container">
 		<h1>numa08 Virtual Machines</h1>
-	</div>
-	<table>
-		<thead>
-			<tr>
-				<td>
-					名前
-				</td>
-			</tr>
-		</thead>
-		<tbody>
-			@for(m <- vms){
+		<table class="table table-hover">
+			<thead>
 				<tr>
-					<td>
-						@m._1
-					</td>
-					<td>
-						@m._2
-					</td>
+					<th>name</th>
+					<th>state</th>
 				</tr>
-			}
-		</tbody>
-	</table>
+			</thead>
+			<tbody>
+				@for(m <- vms){
+					<tr>
+						<td>@m._1</td>
+						<td>@m._2</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>
