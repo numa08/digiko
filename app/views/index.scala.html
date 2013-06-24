@@ -1,4 +1,4 @@
-@(vms:List[String])
+@(vms:List[(String,String)])
 <!doctype html>
 <html lang="en">
 <head>
@@ -18,7 +18,10 @@
 			@for(m <- vms){
 				<tr>
 					<td>
-						@m
+						@m._1
+					</td>
+					<td>
+						@m._2
 					</td>
 				</tr>
 			}

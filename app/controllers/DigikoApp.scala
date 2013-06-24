@@ -32,7 +32,7 @@ object DigikoApp extends Controller {
     val vboxConfig = vboxJson.validate[VBoxConfig].asOpt
 
     
-    val res = VirtualBox(account, vboxConfig).allVms.map( _.getName)
+    val res = VirtualBox(account, vboxConfig).allVms.map(machine => (machine.getName,machine.getState.name))
     val content = views.html.index.render(res)
     Ok(content)
   }
