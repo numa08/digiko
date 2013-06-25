@@ -1,4 +1,4 @@
-@(vms:List[(String,String)])
+@(machines:List[org.virtualbox_4_2.IMachine])
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,10 +17,10 @@
 				</tr>
 			</thead>
 			<tbody>
-				@for(m <- vms){
+				@for(machine <- machines){
 					<tr>
-						<td>@m._1</td>
-						<td>@m._2</td>
+						<td>@machine.getName</td>
+						<td>@machine.getState.name</td>
 					</tr>
 				}
 			</tbody>
