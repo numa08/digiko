@@ -14,6 +14,7 @@
 				<tr>
 					<th>name</th>
 					<th>state</th>
+					<th>controll</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -21,6 +22,11 @@
 					<tr>
 						<td>@machine.getName</td>
 						<td>@machine.getState.name</td>
+						@if(machine.getState==org.virtualbox_4_2.MachineState.PoweredOff){
+							<td><button class="btn primary">ON</button></td>
+						} else {
+							<td><bbutton class="btn btn-danger">OFF</bbutton></td>
+						}
 					</tr>
 				}
 			</tbody>
