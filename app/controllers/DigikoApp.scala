@@ -1,6 +1,7 @@
 package controllers
 
 import play.api._
+import play.api.libs.iteratee._
 import play.api.mvc._
 import java.io.File
 import scala.io.Source
@@ -37,4 +38,9 @@ object DigikoApp extends Controller {
     Ok(content)
   }
   
+  def turnon = WebSocket.using[String]{ request => 
+    val in = Iteratee.foreach[String](println).mapDone { _ => println("Disconnected")}
+    val out = Enumerator("Hello")
+    (in, out)
+  }
 }
