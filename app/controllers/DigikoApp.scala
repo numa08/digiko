@@ -40,7 +40,7 @@ object DigikoApp extends Controller {
   
   def turnon(name:String) = WebSocket.using[String]{ request => 
     val in = Iteratee.foreach[String](println).mapDone { _ => println("Disconnected")}
-    val out = Enumerator("Hello")
+    val out = Enumerator(name)
     (in, out)
   }
 }

@@ -42,7 +42,7 @@
 			console.log("Server error" + error);
 		};
 		var clickTunrOn = function(){
-			webSock = new WebSocket('ws://localhost:9000/turnon');
+			webSock = new WebSocket('ws://localhost:9000/turnon/numa08');
 			webSock.onmessage = onMessage;
 			webSock.onerror = onError;
 			webSock.onopen = function(){
