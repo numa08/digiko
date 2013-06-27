@@ -12,26 +12,8 @@ object DigikoApp extends Controller {
 
   def index = Action {
   	val application = new DefaultApplication(new File("conf/"), this.getClass.getClassLoader, None, Mode.Dev)
-  	val accountConfigFile = application.resourceAsStream("account.json")
-    val accountJson = accountConfigFile match {
-    	case Some(stream) => {
-                val jsonString = Source.fromInputStream(stream).mkString
-                Json.parse(jsonString)
-              }
-    	case _ => JsNull
-    }
-    val account = accountJson.validate[Account].asOpt
-    
-    val vboxConfigFile = application.resourceAsStream("vbox.json")
-    val vboxJson = vboxConfigFile match {
-      case Some(stream) => {
-                val jsonString = Source.fromInputStream(stream).mkString
-                Json.parse(jsonString)
-            }
-      case _ => JsNull
-    }
-    val vboxConfig = vboxJson.validate[VBoxConfig].asOpt
-
+    val account = Account.parseJson("account.json", application)
+    val vboxConfig = VBoxConfig.parseJson("vbox.json", application)
     
     val res = VirtualBox(account, vboxConfig).allVms
     val content = views.html.index.render(res)
