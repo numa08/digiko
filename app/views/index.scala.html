@@ -23,7 +23,7 @@
 						<td>@machine.getName</td>
 						<td>@machine.getState.name</td>
 						@if(machine.getState==org.virtualbox_4_2.MachineState.PoweredOff){
-							<td><button class="btn primary" id="power_button" onclick="clickTunrOn()">ON</button></td>
+							<td><button class="btn primary" id="power_button" onclick="clickTunrOn('@machine.getName')">ON</button></td>
 						} else {
 							<td><bbutton class="btn btn-danger"　id="power_button">OFF</bbutton></td>
 						}
@@ -41,13 +41,10 @@
 		var onError = function(error){
 			console.log("Server error" + error);
 		};
-		var clickTunrOn = function(){
-			webSock = new WebSocket('ws://localhost:9000/turnon/numa08');
+		var clickTunrOn = function(name){
+			webSock = new WebSocket('ws://localhost:9000/turnon/' + name);
 			webSock.onmessage = onMessage;
 			webSock.onerror = onError;
-			webSock.onopen = function(){
-				webSock.send("hogehoge");
-			};
 		};
 	</script>
 </body>
