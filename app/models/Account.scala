@@ -18,11 +18,11 @@ object Account {
 	def parseJson(file: String, application : DefaultApplication) = {
 		val accountConfigFile = application.resourceAsStream(file)
     	val accountJson = accountConfigFile match {
-    	case Some(stream) => {
+    		case Some(stream) => {
                 val jsonString = Source.fromInputStream(stream).mkString
                 Json.parse(jsonString)
               }
-    	case _ => JsNull
+    		case _ => JsNull
     	}
     	accountJson.validate[Account].asOpt
 	}

@@ -10,8 +10,10 @@ import play.api.libs.json._
 
 object DigikoApp extends Controller {
 
+  lazy val defaultApplication = new DefaultApplication(new File("conf/"), this.getClass.getClassLoader, None, Mode.Dev)
+
   def index = Action {
-  	val application = new DefaultApplication(new File("conf/"), this.getClass.getClassLoader, None, Mode.Dev)
+  	val application = defaultApplication
     val account = Account.parseJson("account.json", application)
     val vboxConfig = VBoxConfig.parseJson("vbox.json", application)
     
@@ -22,7 +24,20 @@ object DigikoApp extends Controller {
   
   def turnon(name:String) = WebSocket.using[String]{ request => 
     val in = Iteratee.foreach[String](println).mapDone { _ => println("Disconnected")}
-    val out = Enumerator(name)
+
+    val application = defaultApplication
+    val account = Account.parseJson("account.json", application)
+    val vboxConfig = VBoxConfig.parseJson("vbox.json", application)
+    val vbox = VirtualBox(account, vboxConfig)
+
+    vbox.turnOn(name)
+    val machine = vbox.findVm(name)
+
+    val out = machine match {
+      case Some(machine) => Enumerator(machine.getState.name)
+      case _ => Enumerator("No machine")
+    }
+
     (in, out)
   }
 }

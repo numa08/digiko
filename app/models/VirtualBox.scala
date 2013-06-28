@@ -20,6 +20,23 @@ case class VirtualBox(val account:Account, val vbox:VBoxConfig){
 			case _ => Nil
 		}
 	}
+
+	def turnOn(name: String)  {
+		vboxManaager() match {
+			case Some(manager) => manager.startVm(name, null, 7000)
+			case _ => Unit
+		}
+	}
+
+	def findVm(name: String) = {
+		vboxManaager() match {
+			case Some(manager) => {val machine = manager.getVBox().findMachine(name)
+								   Option(machine)
+								   }
+			case _ => None
+		}
+		
+	}
 }
 
 object VirtualBox {

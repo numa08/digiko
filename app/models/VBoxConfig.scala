@@ -18,11 +18,11 @@ object VBoxConfig {
 	def parseJson(file: String, application : DefaultApplication) = {
 		val vboxConfigFile = application.resourceAsStream(file)
     	val vboxJson = vboxConfigFile match {
-      			case Some(stream) => {
-                	val jsonString = Source.fromInputStream(stream).mkString
-                	Json.parse(jsonString)
-            	}
-      			case _ => JsNull
+  			case Some(stream) => {
+            	val jsonString = Source.fromInputStream(stream).mkString
+            	Json.parse(jsonString)
+        		}
+  			case _ => JsNull
     	}
 	    vboxJson.validate[VBoxConfig].asOpt
 	}
