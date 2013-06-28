@@ -30,9 +30,12 @@ case class VirtualBox(val account:Account, val vbox:VBoxConfig){
 
 	def findVm(name: String) = {
 		vboxManaager() match {
-			case Some(manager) => {val machine = manager.getVBox().findMachine(name)
-								   Option(machine)
-								   }
+			case Some(manager) => {
+				try{
+						val machine = manager.getVBox().findMachine(name)
+					   Option(machine)
+					} catch {case e:Exception => None}
+				}
 			case _ => None
 		}
 		

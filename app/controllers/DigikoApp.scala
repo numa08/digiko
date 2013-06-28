@@ -29,12 +29,13 @@ object DigikoApp extends Controller {
     val vboxConfig = VBoxConfig.parseJson("vbox.json", application)
     val vbox = VirtualBox(account, vboxConfig)
 
-    vbox.turnOn(name)
     val machine = vbox.findVm(name)
-
     machine match {
-      case Some(machine) => Ok(machine.getState.toString)
-      case _ => Ok("No machine")
+      case Some(machine) => {
+                              vbox.turnOn(machine.getName)
+                              Ok(machine.getState.name)
+                            }
+      case _ => Ok("Not found machine")
     }
   }
 }
