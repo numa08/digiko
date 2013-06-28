@@ -22,9 +22,8 @@ object DigikoApp extends Controller {
     Ok(content)
   }
   
-  def turnon(name:String) = WebSocket.using[String]{ request => 
-    val in = Iteratee.foreach[String](println).mapDone { _ => println("Disconnected")}
-
+  def turnon(name:String) = Action{ request => 
+    
     val application = defaultApplication
     val account = Account.parseJson("account.json", application)
     val vboxConfig = VBoxConfig.parseJson("vbox.json", application)
@@ -33,11 +32,9 @@ object DigikoApp extends Controller {
     vbox.turnOn(name)
     val machine = vbox.findVm(name)
 
-    val out = machine match {
-      case Some(machine) => Enumerator(machine.getState.name)
-      case _ => Enumerator("No machine")
+    machine match {
+      case Some(machine) => Ok(machine.getState.toString)
+      case _ => Ok("No machine")
     }
-
-    (in, out)
   }
 }
