@@ -40,7 +40,7 @@ object DigikoApp extends Controller {
   }
 
   def status(name: String) = WebSocket.using[String] { request =>
-    val in = Iteratee.foreach[String](_ => Unit)
+    val in = Done[String, Unit]((), Input.EOF)
     val out = Enumerator(name)
 
     (in, out)
