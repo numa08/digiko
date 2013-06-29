@@ -34,17 +34,12 @@
 	</div>
 	<script type="text/javascript" src="@routes.Assets.at("javascripts/jquery-1.9.0.min.js")"></script>
 	<script type="text/javascript">
-		var webSock;
-		var onMessage = function(message){
-			console.log("Server send " + message.data);
-		};
-		var onError = function(error){
-			console.log("Server error" + error);
-		};
 		var clickTunrOn = function(name){
-			webSock = new WebSocket('ws://localhost:9000/turnon/' + name);
-			webSock.onmessage = onMessage;
-			webSock.onerror = onError;
+			var result = $.ajax({
+				url:"http://localhost:9000/turnon/" + name,
+				async : false
+			}).responseText;
+			console.log(result)
 		};
 	</script>
 </body>
