@@ -44,7 +44,12 @@
 
 		$(window).load(function(){
 			@for(machine <- machines){
-				$("#@machine.getName").text("@machine.getState.name");
+				var onGetStatus = function(message) {
+					$("#@machine.getName").text(message.data);
+				};
+
+				var webSock = new WebSocket('ws://localhost:9000/status/@machine.getName');
+				webSock.onmessage = onGetStatus;
 			}
 		});
 
