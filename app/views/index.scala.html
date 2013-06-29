@@ -21,7 +21,7 @@
 				@for(machine <- machines){
 					<tr>
 						<td>@machine.getName</td>
-						<td>@machine.getState.name</td>
+						<td id="@machine.getName"></td>
 						@if(machine.getState==org.virtualbox_4_2.MachineState.PoweredOff){
 							<td><button class="btn primary" id="power_button" onclick="clickTunrOn('@machine.getName')">ON</button></td>
 						} else {
@@ -42,9 +42,12 @@
 			console.log(result)
 		};
 
-		var getStatus = function(name){
-			console.log(name)
-		};
+		$(window).load(function(){
+			@for(machine <- machines){
+				$("#@machine.getName").text("@machine.getState.name");
+			}
+		});
+
 	</script>
 </body>
 </html>
