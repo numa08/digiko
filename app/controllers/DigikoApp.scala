@@ -38,4 +38,11 @@ object DigikoApp extends Controller {
       case _ => Ok("Not found machine")
     }
   }
+
+  def status(name: String) = WebSocket.using[String] { request =>
+    val in = Iteratee.foreach[String](_ => Unit)
+    val out = Enumerator(name)
+
+    (in, out)
+  }
 }
